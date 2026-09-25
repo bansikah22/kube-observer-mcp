@@ -1,0 +1,31 @@
+[project]
+name = "kube-observer-mcp"
+version = "0.1.0"
+description = "Read-only Kubernetes inventory tools exposed through Model Context Protocol"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kubernetes>=32,<36",
+    "mcp>=2.2,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "pytest-cov>=6,<7",
+]
+
+[project.scripts]
+kube-observer-mcp = "kube_observer_mcp.server:main"
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
