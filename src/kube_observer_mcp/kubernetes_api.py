@@ -13,14 +13,14 @@ def core_v1_api() -> client.CoreV1Api:
     return client.CoreV1Api()
 
 
-def fetch_nodes() -> list[client.V1Node]:
+def fetch_nodes() -> client.V1NodeList:
     """List Kubernetes nodes through the Core API."""
-    return core_v1_api().list_node(_request_timeout=10).items
+    return core_v1_api().list_node(_request_timeout=10)
 
 
-def fetch_pods(namespace: str) -> list[client.V1Pod]:
+def fetch_pods(namespace: str) -> client.V1PodList:
     """List pods from one namespace through the Core API."""
     return core_v1_api().list_namespaced_pod(
         namespace=namespace,
         _request_timeout=10,
-    ).items
+    )

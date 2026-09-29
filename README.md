@@ -5,9 +5,14 @@ tools for AI agents.
 
 The first release exposes two typed tools:
 
-- `list_nodes`: node name, Ready condition, Kubernetes version, OS, architecture.
+- `list_nodes`: observation timestamp, collection resource version, and each
+	node's name, Ready condition, Kubernetes version, OS, architecture.
 - `list_pods(namespace)`: pod name, namespace, phase, ready container count,
-  restart count.
+	restart count, plus observation timestamp and collection resource version.
+
+Each result's `resource_version` applies only to the Kubernetes collection read
+by that tool. It helps clients identify separate observations during a rollout;
+it does not claim a consistent snapshot across multiple tool calls.
 
 It deliberately does not expose arbitrary `kubectl`, shell execution, Secrets,
 container environment, or mutation operations. The default Kubernetes RBAC only

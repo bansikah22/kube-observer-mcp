@@ -1,6 +1,11 @@
 from types import SimpleNamespace
 
-from kube_observer_mcp.inventory import summarize_node, summarize_nodes, summarize_pod
+from kube_observer_mcp.inventory import (
+    observation_response,
+    summarize_node,
+    summarize_nodes,
+    summarize_pod,
+)
 
 
 def make_node(name: str, ready: str | None) -> SimpleNamespace:
@@ -65,3 +70,13 @@ def test_pod_summary_contains_only_requested_status_fields() -> None:
     }
     assert "image" not in result
     assert "environment" not in result
+
+
+def test_observation_response_includes_collection_freshness_metadata() -> None:
+    resource_list = SimpleNamespace(metadata=SimpleNamespace(resource_version="12345"))
+
+    response = observation_response(resource_list, [{"name": "worker-a"}])
+
+    assert response["resource_version"] == "12345"
+    assert response["items"] == [{"name": "worker-a"}]
+    assert response["observed_at"].endswith("Z")

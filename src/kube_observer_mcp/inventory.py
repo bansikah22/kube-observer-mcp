@@ -1,6 +1,7 @@
 """Small, explicit summaries of Kubernetes nodes and pods."""
 
 from collections.abc import Iterable
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -48,3 +49,13 @@ def summarize_pods(pods: Iterable[Any]) -> list[dict[str, Any]]:
         (summarize_pod(pod) for pod in pods),
         key=lambda item: (item["namespace"], item["name"]),
     )
+
+
+def observation_response(resource_list: Any, items: list[dict[str, Any]]) -> dict[str, Any]:
+    """Attach collection-scoped freshness metadata to summarized list results."""
+    metadata = getattr(resource_list, "metadata", None)
+    return {
+        "observed_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "resource_version": getattr(metadata, "resource_version", None),
+        "items": items,
+    }
