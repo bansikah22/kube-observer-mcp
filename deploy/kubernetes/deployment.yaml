@@ -27,7 +27,7 @@ spec:
             sizeLimit: 16Mi
       containers:
         - name: server
-          image: ghcr.io/bansikah22/kube-observer-mcp:0.1.0
+          image: ghcr.io/bansikah22/kube-observer-mcp:0.1.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
